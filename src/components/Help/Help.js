@@ -1,24 +1,21 @@
 import React,{Component} from 'react';
 import {Container, Dimmer, Divider, Header, Image, Label, Loader, Segment} from "semantic-ui-react";
-
+import cfg from "../../config/backend-api";
 
 const getRouterProperty  = async (item) => {
-    return await fetch(item, {method: 'GET'}).then(r => r.json()).catch(e=>{console.log(e);});
+    return await fetch(cfg().bcknd.host+"/"+item, {method: 'GET'}).then(r => r.json()).catch(e=>{console.log(e);});
 };
 
 const findByName = (data,name) => {
-
   try {
       let res = '';
       if (data) {
           res = data.filter(e => e.name === name);
           if (!res[0].img.url) { throw new Error('img.url not found')}
-          return res[0].img.url;
+          return cfg().bcknd.host+res[0].img.url;
       }
   } catch (e) { return ''; }
 };
-
-
 
 class Help extends Component {
 
@@ -33,17 +30,12 @@ class Help extends Component {
     UNSAFE_componentWillMount() {
     this.setState({isLoading: true});
     getRouterProperty('imagestores').then(r => this.setState({data : r, isLoading: false}) );
-
     }
 
     render() {
-
         const {isLoading,data} = this.state;
-
         if (isLoading) {return <Dimmer active={true}> <Loader/> </Dimmer>
-        } else
-        {
-
+        } else {
         return (
 
             <Container>
@@ -91,10 +83,8 @@ class Help extends Component {
                 <Segment textAlign={'left'}>
                 <Header size={'large'} > Замена стекла корпуса </Header>
                 <Image  floated={'left'} size={'tiny'} src={findByName(data,"icn_dspl_inv") }  alt={'Здесь изображена батарейка'} />
-                <p> {"Аккумуляторная батарея любого типа производства имеет свойства расходовать свою емкость со временем. "} </p>
-                <p> {"Компания Apple рекомендует менять аккумуляторную батарею каждые 3 года пользования устройства."} </p>
-                <Divider/>
-                <p>{"Состояние аккумулятора вы можете проверить в: \"Настройки\"-> \"Аккумулятор\" -> \"Состояние аккумулятора в процентном содержании.\" "} </p>
+                <p> {"Для устройств,начиная с iPhone 8,разбитое стекло задней панели корпуса - не приговор."} </p>
+                <p> {"Посредством лазерной обработки удаляются дефекты в виде битого стекла и осколков,после чего устанавливается новая стеклянная панель в соответствии с параметрами вашего устройства. "} </p>
                 <br/> <br/>
                 <Label attached={'bottom left'} color={'yellow'} tag={true}> Категория ремонта: Medium</Label>
                 <br/> <br/>

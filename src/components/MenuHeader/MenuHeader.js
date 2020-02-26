@@ -1,15 +1,11 @@
 import React, {Component} from 'react';
 import '../../App.css';
 import {Container, Menu} from "semantic-ui-react";
-
-
+import cfg from "../../config/backend-api";
 
 const getRouterProperty  = async (item) => {
-   return await fetch(item, {method: 'GET'}).then(r => r.json());
+   return await fetch(cfg().bcknd.host+item, {method: 'GET'}).then(r => r.json());
 };
-
-
-
 
 class MenuHeader extends  Component {
 
@@ -25,12 +21,9 @@ class MenuHeader extends  Component {
         this.setState({isLoading: false});
     }
 
-
-    UNSAFE_componentWillMount()
-     {
+    UNSAFE_componentWillMount() {
         this.getData();
     };
-
 
     render() {
         const  {data,isLoading} = this.state;
@@ -38,11 +31,8 @@ class MenuHeader extends  Component {
             <Container className={'App-menu'} >
             <Menu  fluid={true} floated={true} widths={4} >
 
-
-
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 {data.map(e=>  <Menu.Item href={e.url} key={e.id} >  {e.title}  </Menu.Item>)}
-
 
     </Menu>
             </Container>

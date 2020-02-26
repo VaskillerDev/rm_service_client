@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import {Card, Container, Divider, Label} from "semantic-ui-react";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import ReactMarkdown from "react-markdown";
 
 const addTags =  (tags) => {
 
@@ -23,7 +24,7 @@ class ContentCard extends Component{
                     <Divider/>
                     <Card.Description>
                     <Container >
-                        {this.props.content}
+                        <ReactMarkdown source={this.props.content}/>
                     </Container>
                     </Card.Description>
                     <br/>

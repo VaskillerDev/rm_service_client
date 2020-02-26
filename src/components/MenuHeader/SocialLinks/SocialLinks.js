@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import { Image} from "semantic-ui-react";
 import '../../../App.css';
+import cfg from "../../../config/backend-api";
 
 
 const getSocialLinksProperty  = async (item) => {
-    return await fetch(item, {method: 'GET'}).then(r => r.json());
+    return await fetch(cfg().bcknd.host+item, {method: 'GET'}).then(r => r.json());
 };
 
 class SocialLinks extends Component {
@@ -38,7 +39,7 @@ class SocialLinks extends Component {
             return  (
 
                     <Image.Group   className={'App-sociallinks'}  >
-                        {data.filter(e=>e.url != null).map(e =>  <Image alt={e.url} href={e.url}  centered={true}  src={e.img.url} key={e.id} size={'tiny'}/>)}
+                        {data.filter(e=>e.url != null).map(e =>  <Image alt={e.url} href={e.url}  centered={true}  src={cfg().bcknd.host+e.img.url} key={e.id} size={'tiny'}/>)}
                     </Image.Group>
 
                 );

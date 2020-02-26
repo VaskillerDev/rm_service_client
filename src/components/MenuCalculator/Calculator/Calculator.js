@@ -1,11 +1,13 @@
 import React,{Component,useState,useEffect} from 'react';
 import {Button, Container, Dimmer, Dropdown, Input, Label, Loader, Segment} from "semantic-ui-react";
 
+import  cfg from "../../../config/backend-api"
+
 //todo: устранить глобальность - внести в комопнент, как только станет известно !!!
 let cache = new Map(); // Глобальный кэш на компонент
 
 const getRouterProperty  = async (item) => {
-    return await fetch(item, {method: 'GET'}).then(r => r.json());
+    return await fetch(cfg().bcknd.host+item, {method: 'GET'}).then(r => r.json());
 };
 
 function ButtonToggle(props)  {
@@ -51,12 +53,13 @@ function TotalPrice() {
 function ButtonNext() {
 
     let [isLoading,setLoading]      = useState(false);
-    let [color,setColor]        = useState('blue');
-    let [message,setMessage]    = useState("Отправить заяку");
+    let [color,setColor]            = useState('blue');
+    let [message,setMessage]        = useState("Отправить заяку");
 
    async function sendData(data) {
+       const url = cfg().mailer.host+"/send";
 
-       return await fetch('http://localhost:8080/send', {
+       return await fetch(url, {
            method: 'POST',
            headers: {
                'Content-Type':  'application/json;charset=utf-8'
@@ -78,9 +81,12 @@ function ButtonNext() {
 
            if (jsDetect.test(comment)){ throw new Error('JS detected')}
 
+           let services = [];
+           cache.forEach((val,key)=>{services.push(`${key} : ${val}`);});
+
             const data = {
               model    : model,
-              services : JSON.stringify([...cache]),
+              services : JSON.stringify([...services]),
               comment  : comment
             };
 
@@ -202,7 +208,6 @@ class Calculator extends Component {
                     <br/>
                     {this.state.ButtonNext}
                 </Segment>
-
 
             </Container>
         );}

@@ -1,29 +1,23 @@
 import React,{Component} from "react";
 import {CardGroup, Container, Dimmer, Loader,} from "semantic-ui-react";
 import ContentCard from "./ContentCard";
+import cfg from "../../config/backend-api";
 
 const getPostProperty  = async (item) => {
-    return await fetch(item, {method: 'GET'}).then(r => r.json());
+    return await fetch(cfg().bcknd.host+item, {method: 'GET'}).then(r => r.json());
 };
-
 
 const sliceText = (text) => {
-
     text = text.slice(0,128);
-
     if (text.length >= 128) {text = text.concat("...");}
-
-
     return text;
 };
-
 
 class ContentCardSpawn extends Component{
 
     constructor(props){
         super(props);
         this.state = {data: {}, isLoading: false};
-
     }
 
     async getData(){
@@ -38,24 +32,23 @@ class ContentCardSpawn extends Component{
     }
 
     render() {
-
         const {data,isLoading} = this.state;
-
         if (isLoading) {return <Dimmer active> <Loader/>  </Dimmer>} else {
 
             return (
-               <Container textAlign={'center'}>
+               <Container>
+                <CardGroup doubling={true} itemsPerRow={2} >
+                    {data.map(e=>
+                            <ContentCard
+                                src={cfg().bcknd.host+e.image.url}
+                                alt={e.alt_image}
+                                url={`posts/${e.id}`}
+                                header={e.header}
+                                content={sliceText(e.content)}
+                                key={e.id}
+                                tags = {e.tags} />
+                    )}
 
-                <CardGroup   doubling={true} itemsPerRow={2} >
-                    {data.map(e=> <ContentCard
-                        src={e.image.url}
-                        alt={e.alt_image}
-                        url={`posts/${e.id}`}
-                        header={e.header}
-                        content={sliceText(e.content)}
-                        key={e.id}
-                        tags = {e.tags}
-                    />)}
                 </CardGroup>
                </Container>
             );
